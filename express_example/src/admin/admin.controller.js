@@ -6,8 +6,7 @@ const Role = require("../commons/util").Role;
 const { Forbidden } = require('http-errors');
 
 router.use(function(req,res, next){
-    if(req?.user?.role !== Role.admin){
-        console.log(">>>>>>>>>", req.user)
+    if(req.user?.role !== Role.admin){
         return next(new Forbidden())
     }
     return next();
