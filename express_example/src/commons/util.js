@@ -1,6 +1,12 @@
 const fs = require('fs');
 
+const Role = {
+    customer: "customer",
+    admin: "admin",
+ };
+
 module.exports = {
+    Role,
     writeInFile(content) {
         return new Promise((resolve) => {
             fs.writeFile('content.txt', content, {encoding: 'utf-8'}, () => {

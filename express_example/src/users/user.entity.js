@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-
+const Role = require("../commons/util").Role;
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
     username: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        minLength : 4,
     },
 
     password: {
@@ -25,8 +26,23 @@ const schema = new Schema({
         required: true,
     },
 
-    role: {
+    role:{
         type: String,
+        required: true,
+        default: "customer",
+        enum : Object.keys(Role),
+    },
+
+    isLocked: {
+        type: Boolean,
+        required: true,
+        default:false,
+    },
+
+    successiveFailedLogins : {
+        type: Number,
+        required:true,
+        default:0,
     }
 }, { collection: 'users' });
 
@@ -35,7 +51,8 @@ schema.pre('save', function (next) {
         const salt = bcrypt.genSaltSync();
         this.password = bcrypt.hashSync(this.password, salt);
     }
-
+    this.firstName = this.firstName.trim();
+    this.lastName = this.lastName.trim();
     next();
 })
 

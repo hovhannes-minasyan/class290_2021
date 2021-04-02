@@ -3,8 +3,13 @@ const app = require('../../src/app');
 const mongoose = require('mongoose');
 const chai = require('chai');
 const expect = chai.expect;
+const User = require("../../src/users/user.entity");
 
-describe.skip("Testing users API", function () {
+describe("Testing users API", function () {
+
+    this.beforeEach(async function(){
+        User.syncIndexes();
+    })
 
     after(async function () {
         await mongoose.connection.db.dropDatabase();
@@ -26,7 +31,15 @@ describe.skip("Testing users API", function () {
                 })
         })
 
-        it.skip("Fails to create a user with existing username", function () {
+        it("Fails to create a user with existing username", function () {
+            request(app)
+            .post('/users')
+            .send({
+                username: "johnconor",
+                password: "2222",
+                firstName: "John",
+                lastName: "Conor"
+            });
             return request(app)
                 .post('/users')
                 .send({
